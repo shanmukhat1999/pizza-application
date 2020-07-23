@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>hello</title>
+        {% load static %}
+        <script src="{% static 'pizza/myorders.js' %}"></script>
+    </head>
+    <body>
+        <a href="/logout_view">Logout</a>
+        <hr>
+        <h1>
+            Your Orders
+        </h1>
+        <hr>
+        <ul>
+            {% for i in orders %}
+            Your Order Number is #{{i.order_no}}
+            <div>{{i.time_ordered}}</div>
+            {% if i.completed %}
+            <div>Order completed</div>
+            {% else %}
+            <div>Order Pending</div>
+            {% endif %}
+
+            <h5>List of items you ordered</h5>
+            <div>
+                {{i.items}}
+            </div>
+            <hr>
+            {% endfor %}
+        </ul>
+        <input type="hidden" id="refresh" value="no">
+    </body>
+</html>

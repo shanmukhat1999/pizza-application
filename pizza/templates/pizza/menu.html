@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>hello</title>
+        <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded',() => {
+                if(!!window.performance && window.performance.navigation.type == 2)
+                {
+                    window.location.reload(true);
+                } 
+                //When the window is opened cart should be restored
+                if(localStorage.getItem("sum"))
+                {
+                    if(localStorage.getItem("sum") === "0")
+                    {
+                        document.querySelector('#po').disabled = true;
+                        s=0;
+                        k=0;
+                    }
+                    document.querySelector('ul').innerHTML=localStorage.getItem("imp");
+                    s=parseFloat(localStorage.getItem("sum"));
+                    k=parseFloat(localStorage.getItem("num"));
+                }
+                else
+                {
+                    document.querySelector('#po').disabled = true;
+                    s=0;
+                    k=0;
+                }
+                document.querySelector('#total').innerHTML = `<h3>Total: ${s}</h3>`;
+                //For csrf-token cookie function
+                function getCookie(c_name) {
+                   if(document.cookie.length > 0) {
+                        c_start = document.cookie.indexOf(c_name + "=");
+                        if(c_start != -1) {
+                            c_start = c_start + c_name.length + 1;
+                            c_end = document.cookie.indexOf(";", c_start);
+                            if(c_end == -1) c_end = document.cookie.length;
+                            return unescape(document.cookie.substring(c_start,c_end));
+                        }
+                    }
+                    return "";
+                }
+                //when remove button is pressed from cart
+                function func(button)
+                {
+                    button.onclick = () => {
+                        s=s-parseFloat(button.dataset.val);
+                        s=Math.round(s * 100) / 100;
+                        var ind = button.dataset.index;
+                        if(button.dataset.quan === "1")
+                        {
+                            document.querySelector('ul').removeChild(document.querySelector('ul').childNodes[parseInt(ind)+1]);
+                            localStorage.removeItem(button.dataset.item);
+                            var x;
+                            var c=document.querySelector('ul').getElementsByTagName('li').length;
+                            for(x=parseInt(button.dataset.index);x<c;x++)
+                            {
+                                document.querySelector('ul').getElementsByTagName('li')[x].getElementsByTagName('button')[0].dataset.index=parseInt(document.querySelector('ul').getElementsByTagName('li')[x].getElementsByTagName('button')[0].dataset.index)-1;
+                            }
+                            if(document.querySelector('ul').getElementsByTagName('li').length === 0)
+                            {
+                                document.querySelector('#po').disabled = true;
+                            }
+                        }
+                        else
+                        {
+                            var qu=button.dataset.quan;
+                            var q=parseFloat(parseInt(localStorage.getItem(button.dataset.item)-1)*parseFloat(button.dataset.val));
+                            q=Math.round(q*100) /100;
+                            document.querySelector('ul').getElementsByTagName('li')[ind].innerHTML = `${button.dataset.item} ---- ${parseInt(qu)-1} ---- ${q} -- <button class="rem" data-index=${ind} data-val=${button.dataset.val} data-item=${button.dataset.item} data-quan=${parseInt(qu)-1}>-</button>`;
+                            localStorage.setItem(button.dataset.item,qu-1);
+                        }
+                        console.log(ind);
+                        document.querySelector('#total').innerHTML = `<h3>Total: ${s}</h3>`;
+                        localStorage.setItem("imp",document.querySelector('ul').innerHTML);
+                        localStorage.setItem("sum",s);
+                        localStorage.setItem("num",k);
+                        if(button.dataset.item)
+                        document.querySelectorAll('.rem').forEach(button => {
+                            func(button);
+                        });
+                    }
+                }
+                //when remove button is pressed
+                document.querySelectorAll('.rem').forEach(button => {
+                    func(button);
+                });
+                //when add button is pressed
+                document.querySelectorAll('.a').forEach(button => {
+                    button.onclick = () => {
+                        
+                        document.querySelector('#po').disabled = false;
+                        s=s+parseFloat(button.dataset.val);
+                        s=Math.round(s * 100) / 100;
+                        
+                        if(button.dataset.item in localStorage)
+                        {
+                            var i;
+                            for(i=0;i<document.querySelector('ul').getElementsByTagName('li').length;i++)
+                            {
+                                
+                                if(document.querySelector('ul').getElementsByTagName('li')[i].getElementsByTagName('button')[0].dataset.item === button.dataset.item)
+                                {
+        
+                                    var ind =(document.querySelector('ul').getElementsByTagName('li')[i].getElementsByTagName('button'))[0].dataset.index;
+                                    var p=parseFloat(parseFloat(button.dataset.val)*(parseInt(localStorage.getItem(button.dataset.item))+1));
+                                    p=Math.round(p*100) /100;
+                                    document.querySelector('ul').getElementsByTagName('li')[i].innerHTML=`${button.dataset.item} ---- ${parseInt(localStorage.getItem(button.dataset.item))+1} ---- ${p} -- <button class="rem" data-index=${ind} data-val=${button.dataset.val} data-item=${button.dataset.item} data-quan=${parseInt(localStorage.getItem(button.dataset.item))+1}>-</button>`;
+                                    localStorage.setItem(button.dataset.item,parseInt(localStorage.getItem(button.dataset.item))+1);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            var li=document.createElement('li');
+                            li.innerHTML=`${button.dataset.item} ---- ${1} ---- ${(button.dataset.val)} -- <button class="rem" data-index=${document.querySelector('ul').getElementsByTagName('li').length} data-val=${button.dataset.val} data-item=${button.dataset.item} data-quan=${1}>-</button>`;
+                            document.querySelector('ul').append(li);
+                            localStorage.setItem(button.dataset.item,1);
+                        }
+                        document.querySelector('#total').innerHTML = `<h3>Total: ${s}</h3>`;
+                        localStorage.setItem("imp",document.querySelector('ul').innerHTML);
+                        localStorage.setItem("sum",s);
+                        localStorage.setItem("num",k);
+                        document.querySelectorAll('.rem').forEach(button => {
+                            func(button);
+                        });
+                         
+                    }
+                });
+                //when place order is pressed
+                document.querySelector('#po').onclick = () => {
+                    localStorage.clear();
+                    var item_names=[];
+                    var item_quans=[];
+                    var x1;
+                    for(x1=0;x1<document.querySelector('ul').getElementsByTagName('li').length;x1++)
+                    {
+                        item_names.push(" "+(document.querySelector('ul').getElementsByTagName('li')[x1].getElementsByTagName('button')[0].dataset.item)+" : "+document.querySelector('ul').getElementsByTagName('li')[x1].getElementsByTagName('button')[0].dataset.quan+" ");
+                    }  
+                    console.log("a");
+                    var req= new XMLHttpRequest();
+                    req.open('POST','{% url "orders" %}',true);
+                    req.onload = function() {
+                        if (this.readyState == 4 && this.status == 200) {   // *****11*****
+                            console.log("hi")
+                        }    
+                        else 
+                        {
+                            vote_container.innerHTML = '<h2>There was an error. Reload the page to try again.</h2>';
+                        }
+                    }
+                    req.setRequestHeader("X-CSRFToken",getCookie("csrftoken"));
+                    const data = new FormData();
+                    data.append('item_names',item_names);
+                    
+                    data.append('username',document.querySelector('h5').dataset.user);
+                    req.send(data);
+                    document.querySelector('h5').innerHTML=`order placed successfully. Go to "my orders" to view your order`;
+                }
+
+            });
+        </script>
+    </head>
+    <body>
+        <h1>Cart</h1>
+        <div>
+            <ul id='cartlist'>
+            </ul>
+        </div>
+        <div id="total">
+        </div>
+        <button id="po">Place Order</button>
+        <div>
+            <h5 data-user="{{ username }}"></h5>
+        </div>
+        <hr>
+        <a href="/myorders/{{username}}">My Orders</a>
+        <hr>
+        <a href="/logout_view">Logout</a>
+        <hr>
+        <h1>Menu</h1>
+        <hr>
+        <h3>regular pizzas</h3>
+        {% for i in rpizza %}
+        <div>
+            {{i.name}}
+            ||
+            small-{{i.small}}
+            <button  class="a" data-val={{i.small}} data-item="Regular_pizza:{{i.name}}(small)">add</button>
+            ||
+            {{i.large}}
+            <button class="a" data-val={{i.large}} data-item="Regular_pizza:{{i.name}}(large)">add</button>
+        </div>
+        {% endfor %}
+        <h3>sicilian pizzas</h3>
+        {% for i in spizza %}
+        <div>
+            {{i.name}}
+            ||
+            small-{{i.small}}
+            <button class="a" data-val={{i.small}} data-item="Sicilian_pizza:{{i.name}}(small)">add</button>
+            ||
+            {{i.large}}
+            <button class="a" data-val={{i.large}} data-item="Sicilian_pizza:{{i.name}}(large)">add</button>
+        </div>
+        {% endfor %}
+        <h3>Toppings</h3>
+        {% for i in toppings %}
+        <div>
+            {{i.name}}
+            ||
+            price-{{i.price}}
+            <button class="a" data-val={{i.price}} data-item="Topping:{{i.name}}">add</button>
+        </div>
+        {% endfor %}
+        <h3>Sub</h3>
+        {% for i in subs %}
+        <div>
+            {{i.name}}
+            ||
+            small-{{i.small}}
+            <button class="a" data-val={{i.small}} data-item="Sub:{{i.name}}(small)">add</button>
+            ||
+            {{i.large}}
+            <button class="a" data-val={{i.large}} data-item="Sub:{{i.name}}(large)">add</button>
+        </div>
+        {% endfor %}
+        <h3>Pasta</h3>
+        {% for i in pastas %}
+        <div>
+            {{i.name}}
+            ||
+            price-{{i.price}}
+            <button class="a" data-val={{i.price}} data-item="Pasta:{{i.name}}">add</button>
+        </div>
+        {% endfor %}
+        <h3>Salad</h3>
+        {% for i in salads %}
+        <div>
+            {{i.name}}
+            ||
+            price-{{i.price}}
+            <button class="a" data-val={{i.price}} data-item="Salad:{{i.name}}">add</button>
+        </div>
+        {% endfor %}
+        <h3>Dinner platters</h3>
+        {% for i in dinnerplatters %}
+        <div>
+            {{i.name}}
+            ||
+            small-{{i.small}}
+            <button class="a" data-val={{i.small}} data-item="Dinner_platter:{{i.name}}(small)">add</button>
+            ||
+            {{i.large}}
+            <button class="a" data-val={{i.large}} data-item="Dinner_platter:{{i.name}}(large)">add</button>
+        </div>
+        {% endfor %}
+        <input type="hidden" id="refresh" value="no">
+    </body>
+</html>

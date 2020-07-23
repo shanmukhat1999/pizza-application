@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>hello</title>
+    </head>
+    <body>
+        <h1>
+            Login
+        </h1>
+        <hr>
+        {{ msg }}
+        <hr>
+        <form action="/menu" method="POST">
+            {% csrf_token %}
+            <input name="username" placeholder="enter username" type="text">
+            <input name="password" placeholder="enter password" type="password">
+            <button>submit</button>
+        </form>
+    </body>
+</html>
