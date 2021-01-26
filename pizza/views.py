@@ -77,7 +77,7 @@ def orders(request):
 def myorders(request,username):
     if "username" not in request.session:
         return redirect('index')
-    orders = user_order.objects.filter(name=username).order_by("time_ordered")
+    orders = user_order.objects.filter(name=username).order_by("order_no")
     if len(orders) == 0:
         context = {
             'msg':"No orders yet"
