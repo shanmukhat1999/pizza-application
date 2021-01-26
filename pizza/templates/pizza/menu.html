@@ -4,6 +4,7 @@
         <title>hello</title>
         <script type="text/javascript">
             document.addEventListener('DOMContentLoaded',() => {
+                // reload when the back/front are used
                 if(!!window.performance && window.performance.navigation.type == 2)
                 {
                     window.location.reload(true);
@@ -15,17 +16,17 @@
                     {
                         document.querySelector('#po').disabled = true;
                         s=0;
-                        k=0;
+                        //k=0;
                     }
                     document.querySelector('ul').innerHTML=localStorage.getItem("imp");
                     s=parseFloat(localStorage.getItem("sum"));
-                    k=parseFloat(localStorage.getItem("num"));
+                    //k=parseFloat(localStorage.getItem("num"));
                 }
                 else
                 {
                     document.querySelector('#po').disabled = true;
                     s=0;
-                    k=0;
+                    //k=0;
                 }
                 document.querySelector('#total').innerHTML = `<h3>Total: ${s}</h3>`;
                 //For csrf-token cookie function
@@ -41,7 +42,7 @@
                     }
                     return "";
                 }
-                //when remove button is pressed from cart
+                //when remove button is pressed from cart func is called
                 function func(button)
                 {
                     button.onclick = () => {
@@ -75,7 +76,7 @@
                         document.querySelector('#total').innerHTML = `<h3>Total: ${s}</h3>`;
                         localStorage.setItem("imp",document.querySelector('ul').innerHTML);
                         localStorage.setItem("sum",s);
-                        localStorage.setItem("num",k);
+                        //localStorage.setItem("num",k);
                         if(button.dataset.item)
                         document.querySelectorAll('.rem').forEach(button => {
                             func(button);
@@ -121,7 +122,7 @@
                         document.querySelector('#total').innerHTML = `<h3>Total: ${s}</h3>`;
                         localStorage.setItem("imp",document.querySelector('ul').innerHTML);
                         localStorage.setItem("sum",s);
-                        localStorage.setItem("num",k);
+                        //localStorage.setItem("num",k);
                         document.querySelectorAll('.rem').forEach(button => {
                             func(button);
                         });
@@ -142,13 +143,10 @@
                     var req= new XMLHttpRequest();
                     req.open('POST','{% url "orders" %}',true);
                     req.onload = function() {
-                        if (this.readyState == 4 && this.status == 200) {   // *****11*****
+                        if (this.readyState == 4 && this.status == 200) {
                             console.log("hi")
                         }    
-                        else 
-                        {
-                            vote_container.innerHTML = '<h2>There was an error. Reload the page to try again.</h2>';
-                        }
+                        
                     }
                     req.setRequestHeader("X-CSRFToken",getCookie("csrftoken"));
                     const data = new FormData();
@@ -168,7 +166,7 @@
             <ul id='cartlist'>
             </ul>
         </div>
-        <div id="total">
+        <div id="total"> 
         </div>
         <button id="po">Place Order</button>
         <div>
@@ -181,7 +179,7 @@
         <hr>
         <h1>Menu</h1>
         <hr>
-        <h3>regular pizzas</h3>
+        <h3>Regular pizzas</h3>
         {% for i in rpizza %}
         <div>
             {{i.name}}
@@ -189,11 +187,11 @@
             small-{{i.small}}
             <button  class="a" data-val={{i.small}} data-item="Regular_pizza:{{i.name}}(small)">add</button>
             ||
-            {{i.large}}
+            large-{{i.large}}
             <button class="a" data-val={{i.large}} data-item="Regular_pizza:{{i.name}}(large)">add</button>
         </div>
         {% endfor %}
-        <h3>sicilian pizzas</h3>
+        <h3>Sicilian pizzas</h3>
         {% for i in spizza %}
         <div>
             {{i.name}}
@@ -201,7 +199,7 @@
             small-{{i.small}}
             <button class="a" data-val={{i.small}} data-item="Sicilian_pizza:{{i.name}}(small)">add</button>
             ||
-            {{i.large}}
+            large-{{i.large}}
             <button class="a" data-val={{i.large}} data-item="Sicilian_pizza:{{i.name}}(large)">add</button>
         </div>
         {% endfor %}
@@ -214,7 +212,7 @@
             <button class="a" data-val={{i.price}} data-item="Topping:{{i.name}}">add</button>
         </div>
         {% endfor %}
-        <h3>Sub</h3>
+        <h3>Subs</h3>
         {% for i in subs %}
         <div>
             {{i.name}}
@@ -222,11 +220,11 @@
             small-{{i.small}}
             <button class="a" data-val={{i.small}} data-item="Sub:{{i.name}}(small)">add</button>
             ||
-            {{i.large}}
+            large-{{i.large}}
             <button class="a" data-val={{i.large}} data-item="Sub:{{i.name}}(large)">add</button>
         </div>
         {% endfor %}
-        <h3>Pasta</h3>
+        <h3>Pastas</h3>
         {% for i in pastas %}
         <div>
             {{i.name}}
@@ -235,7 +233,7 @@
             <button class="a" data-val={{i.price}} data-item="Pasta:{{i.name}}">add</button>
         </div>
         {% endfor %}
-        <h3>Salad</h3>
+        <h3>Salads</h3>
         {% for i in salads %}
         <div>
             {{i.name}}
@@ -252,7 +250,7 @@
             small-{{i.small}}
             <button class="a" data-val={{i.small}} data-item="Dinner_platter:{{i.name}}(small)">add</button>
             ||
-            {{i.large}}
+            large-{{i.large}}
             <button class="a" data-val={{i.large}} data-item="Dinner_platter:{{i.name}}(large)">add</button>
         </div>
         {% endfor %}
