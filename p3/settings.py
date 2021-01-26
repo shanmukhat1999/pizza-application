@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['https://shan99.herokuapp.com' ,
 # Application definition
 
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic',
     'pizza.apps.PizzaConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -121,11 +122,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'pizza/static')
-STATIC_URL = 'pizza/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "pizza/static"),
+    os.path.join(BASE_DIR, "static"),
 )
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
