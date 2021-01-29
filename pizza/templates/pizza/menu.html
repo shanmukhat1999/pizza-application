@@ -5,6 +5,7 @@
         <script type="text/javascript">
             document.addEventListener('DOMContentLoaded',() => {
                 // reload when the back/front are used
+                var s;
                 if(!!window.performance && window.performance.navigation.type == 2)
                 {
                     window.location.reload(true);
@@ -145,16 +146,17 @@
                     req.onload = function() {
                         if (this.readyState == 4 && this.status == 200) {
                             console.log("hi")
+                            document.querySelector('h5').innerHTML=`order placed successfully. Go to "my orders" to view your order`;
                         }    
                         
                     }
                     req.setRequestHeader("X-CSRFToken",getCookie("csrftoken"));
                     const data = new FormData();
                     data.append('item_names',item_names);
-                    
+                    data.append('price',s);
                     data.append('username',document.querySelector('h5').dataset.user);
                     req.send(data);
-                    document.querySelector('h5').innerHTML=`order placed successfully. Go to "my orders" to view your order`;
+                    
                 }
 
             });
