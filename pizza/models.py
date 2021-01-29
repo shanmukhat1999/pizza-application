@@ -62,6 +62,7 @@ class user_order(models.Model):
     items=models.TextField()
     time_ordered=models.CharField(max_length=64)   
     completed=models.BooleanField(default=False)
+    price=models.FloatField()
 
     def __str__(self):
         return f"{self.name}--#{self.order_no}"
