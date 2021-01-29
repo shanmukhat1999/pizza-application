@@ -37,7 +37,7 @@ def menu(request):
         if user is None:
             return render(request,'pizza/login.html',{"msg":"wrong credentials"})
         request.session["username"]=username    
-    return redirect(menu1)
+    return redirect('menu1')
     print("b")
 
 def menu1(request):
