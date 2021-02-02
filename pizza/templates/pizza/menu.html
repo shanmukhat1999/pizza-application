@@ -67,6 +67,10 @@
                             }
                             localStorage.setItem(button.dataset.iden,qu-1);
                         }
+                        if(s === 0)
+                        {
+                            document.querySelector('#po').disabled = true;
+                        }
                         document.querySelector('#total').innerHTML = `<h3>Total: ${s}</h3>`;
                         localStorage.setItem("imp",document.querySelector('ul').innerHTML);
                         localStorage.setItem("sum",s);
