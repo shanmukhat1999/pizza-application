@@ -1,74 +1,34 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 
 
 # Create your models here.
-class Regular_pizza(models.Model):
-    name=models.CharField(max_length=64)
-    small=models.DecimalField(max_digits=4,decimal_places=2)
-    large=models.DecimalField(max_digits=4,decimal_places=2)
+class Item(models.Model):
+    item_type = models.CharField(max_length=64)
+    item_name = models.CharField(max_length=64)
+    item_size = models.CharField(max_length=10,choices=(("Small","S"),("Large","L"),("NA","N")),default=None,null=True)
+    price = models.FloatField(default=1)
 
     def __str__(self):
-        return f"{self.name} - {self.small} - {self.large}"
+        return f"{self.item_type} -- {self.item_name} -- {self.item_size}"
 
-class Sicilian_pizza(models.Model):
-    name=models.CharField(max_length=64)
-    small=models.DecimalField(max_digits=4,decimal_places=2)
-    large=models.DecimalField(max_digits=4,decimal_places=2)
-
-    def __str__(self):
-        return f"{self.name} - {self.small} - {self.large}"
-
-class Topping(models.Model):
-    name=models.CharField(max_length=64)
-    price=models.DecimalField(max_digits=4,decimal_places=2)
+class User_order(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    time_ordered=models.CharField(max_length=64) 
+    status=models.CharField(max_length=64,choices=(("Processing","Processing"),("Completed","Completed"),("Could not be Completed","Could not be Completed")),default="Processing",null=True)
+    price=models.FloatField()
 
     def __str__(self):
-        return f"{self.name} - {self.price}"
+        return f"#{self.id} -- {self.status}"
 
-class Sub(models.Model):
-    name=models.CharField(max_length=64)
-    small=models.DecimalField(max_digits=4,decimal_places=2,null=True,blank=True)
-    large=models.DecimalField(max_digits=4,decimal_places=2)
-
+class Order(models.Model):
+    order = models.ForeignKey(User_order,on_delete=models.CASCADE,related_name="order_info")
+    item = models.ForeignKey(Item,on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    item_cost = models.FloatField()
+    
     def __str__(self):
-        return f"{self.name} - {self.small} - {self.large}"
-
-class Pasta(models.Model):
-    name=models.CharField(max_length=64)
-    price=models.DecimalField(max_digits=4,decimal_places=2)
-
-    def __str__(self):
-        return f"{self.name} - {self.price}"
-
-class Salad(models.Model):
-    name=models.CharField(max_length=64)
-    price=models.DecimalField(max_digits=4,decimal_places=2)
-
-    def __str__(self):
-        return f"{self.name} - {self.price}"
-
-class Dinner_platter(models.Model):
-    name=models.CharField(max_length=64)
-    small=models.DecimalField(max_digits=4,decimal_places=2)
-    large=models.DecimalField(max_digits=4,decimal_places=2)
-
-    def __str__(self):
-        return f"{self.name} - {self.small} - {self.large}"
-
-class user_order(models.Model):
-    name=models.CharField(max_length=64)
-    order_no=models.IntegerField()
-    items=models.TextField()
-    time_ordered=models.CharField(max_length=64)   
-    completed=models.BooleanField(default=False)
-    price=models.FloatField(default=100.00)
-
-    def __str__(self):
-        return f"{self.name}--#{self.order_no}"
-
-class counter(models.Model):
-    count=models.IntegerField()         
+        return f"#{self.order.id} -- [{self.item}] -- {self.quantity} -- {self.order.status}"        
 
 
 
