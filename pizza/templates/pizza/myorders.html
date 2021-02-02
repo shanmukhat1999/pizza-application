@@ -13,22 +13,28 @@
         </h1>
         <hr>
         <ul>
-            {% for i in orders %}
-            Your Order Number is #{{i.order_no}}
+            {% for i in user_orders%}
+            {% with k=forloop.counter %}
+            Your Order Number is #{{i.id}}
             <div>{{i.time_ordered}}</div>
-            {% if i.completed %}
-            <div>Order completed</div>
-            {% else %}
-            <div>Order Pending</div>
-            {% endif %}
+            
+            <div>Status : {{i.status}}</div>
 
-            <h5>List of items you ordered</h5>
+            {% for j in orders %}
+            {% if k == forloop.counter %}
+            <h5>List of items ordered</h5>
             <div>
-                {{i.items}}
+                {% for x in j %}
+                <div>{{x.item}} -- {{x.quantity}} -- {{x.item_cost}}</div>
+                {% endfor %}
             </div>
+            {% endif %}
+            {% endfor %}
             <h5>Total price : </h5>
             {{i.price}}
+    
             <hr>
+            {% endwith %}
             {% endfor %}
         </ul>
         <input type="hidden" id="refresh" value="no">
