@@ -17,17 +17,14 @@
                     {
                         document.querySelector('#po').disabled = true;
                         s=0;
-                        //k=0;
                     }
                     document.querySelector('ul').innerHTML=localStorage.getItem("imp");
                     s=parseFloat(localStorage.getItem("sum"));
-                    //k=parseFloat(localStorage.getItem("num"));
                 }
                 else
                 {
                     document.querySelector('#po').disabled = true;
                     s=0;
-                    //k=0;
                 }
                 document.querySelector('#total').innerHTML = `<h3>Total: ${s}</h3>`;
                 //For csrf-token cookie function
@@ -49,36 +46,31 @@
                     button.onclick = () => {
                         s=s-parseFloat(button.dataset.val);
                         s=Math.round(s * 100) / 100;
-                        var ind = button.dataset.index;
                         if(button.dataset.quan === "1")
                         {
-                            document.querySelector('ul').removeChild(document.querySelector('ul').childNodes[parseInt(ind)+1]);
-                            localStorage.removeItem(button.dataset.item);
-                            var x;
-                            var c=document.querySelector('ul').getElementsByTagName('li').length;
-                            for(x=parseInt(button.dataset.index);x<c;x++)
-                            {
-                                document.querySelector('ul').getElementsByTagName('li')[x].getElementsByTagName('button')[0].dataset.index=parseInt(document.querySelector('ul').getElementsByTagName('li')[x].getElementsByTagName('button')[0].dataset.index)-1;
-                            }
-                            if(document.querySelector('ul').getElementsByTagName('li').length === 0)
-                            {
-                                document.querySelector('#po').disabled = true;
-                            }
+                            localStorage.removeItem(button.dataset.iden);
+                            button.parentNode.remove()
                         }
                         else
                         {
                             var qu=button.dataset.quan;
-                            var q=parseFloat(parseInt(localStorage.getItem(button.dataset.item)-1)*parseFloat(button.dataset.val));
+                            var q=parseFloat(parseInt(localStorage.getItem(button.dataset.iden)-1)*parseFloat(button.dataset.val));
                             q=Math.round(q*100) /100;
-                            document.querySelector('ul').getElementsByTagName('li')[ind].innerHTML = `${button.dataset.item} ---- ${parseInt(qu)-1} ---- ${q} -- <button class="rem" data-index=${ind} data-val=${button.dataset.val} data-item=${button.dataset.item} data-quan=${parseInt(qu)-1}>-</button>`;
-                            localStorage.setItem(button.dataset.item,qu-1);
+                            console.log(qu);
+                            var x;
+                            for(x=0;x<document.querySelector('ul').getElementsByTagName('li').length;x++)
+                            {
+                                if(document.querySelector('ul').getElementsByTagName('li')[x].getElementsByTagName('button')[0].dataset.iden === button.dataset.iden)
+                                {
+                                    document.querySelector('ul').getElementsByTagName('li')[x].innerHTML=`${button.dataset.item_type} -- ${button.dataset.item_name} -- ${button.dataset.item_size} -- ${parseInt(qu)-1} -- ${q} -- <button class="rem" data-val=${button.dataset.val} data-iden=${button.dataset.iden} data-quan=${parseInt(qu)-1} data-cost=${q} data-item_type=${button.dataset.item_type} data-item_name=${button.dataset.item_name} data-item_size=${button.dataset.item_size}>-</button>`;
+                                }
+                            }
+                            localStorage.setItem(button.dataset.iden,qu-1);
                         }
-                        console.log(ind);
                         document.querySelector('#total').innerHTML = `<h3>Total: ${s}</h3>`;
                         localStorage.setItem("imp",document.querySelector('ul').innerHTML);
                         localStorage.setItem("sum",s);
-                        //localStorage.setItem("num",k);
-                        if(button.dataset.item)
+                        if(parseInt(localStorage.getItem("sum")) !== 0)
                         document.querySelectorAll('.rem').forEach(button => {
                             func(button);
                         });
@@ -96,34 +88,31 @@
                         s=s+parseFloat(button.dataset.val);
                         s=Math.round(s * 100) / 100;
                         
-                        if(button.dataset.item in localStorage)
+                        if(button.dataset.iden in localStorage)
                         {
                             var i;
                             for(i=0;i<document.querySelector('ul').getElementsByTagName('li').length;i++)
                             {
                                 
-                                if(document.querySelector('ul').getElementsByTagName('li')[i].getElementsByTagName('button')[0].dataset.item === button.dataset.item)
+                                if(document.querySelector('ul').getElementsByTagName('li')[i].getElementsByTagName('button')[0].dataset.iden === button.dataset.iden)
                                 {
-        
-                                    var ind =(document.querySelector('ul').getElementsByTagName('li')[i].getElementsByTagName('button'))[0].dataset.index;
-                                    var p=parseFloat(parseFloat(button.dataset.val)*(parseInt(localStorage.getItem(button.dataset.item))+1));
+                                    var p=parseFloat(parseFloat(button.dataset.val)*(parseInt(localStorage.getItem(button.dataset.iden))+1));
                                     p=Math.round(p*100) /100;
-                                    document.querySelector('ul').getElementsByTagName('li')[i].innerHTML=`${button.dataset.item} ---- ${parseInt(localStorage.getItem(button.dataset.item))+1} ---- ${p} -- <button class="rem" data-index=${ind} data-val=${button.dataset.val} data-item=${button.dataset.item} data-quan=${parseInt(localStorage.getItem(button.dataset.item))+1}>-</button>`;
-                                    localStorage.setItem(button.dataset.item,parseInt(localStorage.getItem(button.dataset.item))+1);
+                                    document.querySelector('ul').getElementsByTagName('li')[i].innerHTML=`${button.dataset.item_type} -- ${button.dataset.item_name} -- ${button.dataset.item_size} -- ${parseInt(localStorage.getItem(button.dataset.iden))+1} -- ${p} -- <button class="rem" data-iden=${button.dataset.iden} data-val=${button.dataset.val} data-quan=${parseInt(localStorage.getItem(button.dataset.iden))+1} data-cost=${p} data-item_type=${button.dataset.item_type} data-item_name=${button.dataset.item_name} data-item_size=${button.dataset.item_size}>-</button>`;
+                                    localStorage.setItem(button.dataset.iden,parseInt(localStorage.getItem(button.dataset.iden))+1);
                                 }
                             }
                         }
                         else
                         {
                             var li=document.createElement('li');
-                            li.innerHTML=`${button.dataset.item} ---- ${1} ---- ${(button.dataset.val)} -- <button class="rem" data-index=${document.querySelector('ul').getElementsByTagName('li').length} data-val=${button.dataset.val} data-item=${button.dataset.item} data-quan=${1}>-</button>`;
+                            li.innerHTML=`${button.dataset.item_type} -- ${button.dataset.item_name} -- ${button.dataset.item_size} -- ${1} -- ${button.dataset.val} -- <button class="rem" data-iden=${button.dataset.iden} data-val=${button.dataset.val} data-quan=${1} data-cost=${button.dataset.val} data-item_type=${button.dataset.item_type} data-item_name=${button.dataset.item_name} data-item_size=${button.dataset.item_size}>-</button>`;
                             document.querySelector('ul').append(li);
-                            localStorage.setItem(button.dataset.item,1);
+                            localStorage.setItem(button.dataset.iden,1);
                         }
                         document.querySelector('#total').innerHTML = `<h3>Total: ${s}</h3>`;
                         localStorage.setItem("imp",document.querySelector('ul').innerHTML);
                         localStorage.setItem("sum",s);
-                        //localStorage.setItem("num",k);
                         document.querySelectorAll('.rem').forEach(button => {
                             func(button);
                         });
@@ -131,7 +120,7 @@
                     }
                 });
                 //when place order is pressed
-                document.querySelector('#po').onclick = () => {
+                /*document.querySelector('#po').onclick = () => {
                     localStorage.clear();
                     var item_names=[];
                     var item_quans=[];
@@ -153,6 +142,44 @@
                     req.setRequestHeader("X-CSRFToken",getCookie("csrftoken"));
                     const data = new FormData();
                     data.append('item_names',item_names);
+                    data.append('price',s);
+                    data.append('username',document.querySelector('h5').dataset.user);
+                    req.send(data);
+                    
+                }*/
+                document.querySelector('#po').onclick = () => {
+                    localStorage.clear();
+                    var item_names=[];
+                    var item_types=[];
+                    var item_quans=[];
+                    var item_costs=[];
+                    var item_sizes=[];
+                    var x1;
+                    for(x1=0;x1<document.querySelector('ul').getElementsByTagName('li').length;x1++)
+                    {
+                        item_types.push(document.querySelector('ul').getElementsByTagName('li')[x1].getElementsByTagName('button')[0].dataset.item_type);
+                        item_names.push(document.querySelector('ul').getElementsByTagName('li')[x1].getElementsByTagName('button')[0].dataset.item_name);
+                        item_sizes.push(document.querySelector('ul').getElementsByTagName('li')[x1].getElementsByTagName('button')[0].dataset.item_size);
+                        item_quans.push(parseInt(document.querySelector('ul').getElementsByTagName('li')[x1].getElementsByTagName('button')[0].dataset.quan));
+                        item_costs.push(parseFloat(document.querySelector('ul').getElementsByTagName('li')[x1].getElementsByTagName('button')[0].dataset.cost));
+                    }  
+                    console.log("a");
+                    var req= new XMLHttpRequest();
+                    req.open('POST','{% url "orders" %}',true);
+                    req.onload = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            console.log(req.responseText);
+                            document.querySelector('h5').innerHTML=`${req.responseText}`;
+                        }    
+                        
+                    }
+                    req.setRequestHeader("X-CSRFToken",getCookie("csrftoken"));
+                    const data = new FormData();
+                    data.append('item_types',item_types);
+                    data.append('item_names',item_names);
+                    data.append('item_sizes',item_sizes);
+                    data.append('item_costs',item_costs);
+                    data.append('item_quans',item_quans);
                     data.append('price',s);
                     data.append('username',document.querySelector('h5').dataset.user);
                     req.send(data);
@@ -181,81 +208,70 @@
         <hr>
         <h1>Menu</h1>
         <hr>
-        <h3>Regular pizzas</h3>
+        <h3>Regular pizza</h3>
         {% for i in rpizza %}
         <div>
-            {{i.name}}
+            {{i.item_name}}
             ||
-            small-{{i.small}}
-            <button  class="a" data-val={{i.small}} data-item="Regular_pizza:{{i.name}}(small)">add</button>
-            ||
-            large-{{i.large}}
-            <button class="a" data-val={{i.large}} data-item="Regular_pizza:{{i.name}}(large)">add</button>
+            {{i.item_size}}-{{i.price}}
+            <button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button>
         </div>
         {% endfor %}
-        <h3>Sicilian pizzas</h3>
+        <h3>Sicilian pizza</h3>
         {% for i in spizza %}
         <div>
-            {{i.name}}
+            {{i.item_name}}
             ||
-            small-{{i.small}}
-            <button class="a" data-val={{i.small}} data-item="Sicilian_pizza:{{i.name}}(small)">add</button>
-            ||
-            large-{{i.large}}
-            <button class="a" data-val={{i.large}} data-item="Sicilian_pizza:{{i.name}}(large)">add</button>
+            {{i.item_size}}-{{i.price}}
+            <button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button>
         </div>
         {% endfor %}
         <h3>Toppings</h3>
         {% for i in toppings %}
         <div>
-            {{i.name}}
+            {{i.item_name}}
             ||
-            price-{{i.price}}
-            <button class="a" data-val={{i.price}} data-item="Topping:{{i.name}}">add</button>
+            {{i.price}}
+            <button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button>
         </div>
         {% endfor %}
         <h3>Subs</h3>
         {% for i in subs %}
         <div>
-            {{i.name}}
+            {{i.item_name}}
             ||
-            small-{{i.small}}
-            <button class="a" data-val={{i.small}} data-item="Sub:{{i.name}}(small)">add</button>
-            ||
-            large-{{i.large}}
-            <button class="a" data-val={{i.large}} data-item="Sub:{{i.name}}(large)">add</button>
+            {{i.item_size}}-{{i.price}}
+            <button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button>
         </div>
         {% endfor %}
-        <h3>Pastas</h3>
-        {% for i in pastas %}
+        <h3>Pasta</h3>
+        {% for i in pasta %}
         <div>
-            {{i.name}}
+            {{i.item_name}}
             ||
-            price-{{i.price}}
-            <button class="a" data-val={{i.price}} data-item="Pasta:{{i.name}}">add</button>
+            {{i.price}}
+            <button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button>
         </div>
         {% endfor %}
         <h3>Salads</h3>
         {% for i in salads %}
         <div>
-            {{i.name}}
+            {{i.item_name}}
             ||
-            price-{{i.price}}
-            <button class="a" data-val={{i.price}} data-item="Salad:{{i.name}}">add</button>
+            {{i.price}}
+            <button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button>
         </div>
         {% endfor %}
         <h3>Dinner platters</h3>
         {% for i in dinnerplatters %}
         <div>
-            {{i.name}}
+            {{i.item_name}}
             ||
-            small-{{i.small}}
-            <button class="a" data-val={{i.small}} data-item="Dinner_platter:{{i.name}}(small)">add</button>
-            ||
-            large-{{i.large}}
-            <button class="a" data-val={{i.large}} data-item="Dinner_platter:{{i.name}}(large)">add</button>
+            {{i.item_size}}-{{i.price}}
+            <button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button>
         </div>
         {% endfor %}
         <input type="hidden" id="refresh" value="no">
     </body>
 </html>
+
