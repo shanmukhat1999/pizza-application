@@ -14,4 +14,3 @@ class User_orderAdmin(admin.ModelAdmin):
 admin.site.register(Item)
 admin.site.register(User_order,User_orderAdmin)
 admin.site.register(Order)
-admin.site.register(UserProfile)
