@@ -34,18 +34,11 @@ def login_view(request):
         username=request.POST["username"]
         password=request.POST["password"]
         email=request.POST["email"]
-        phone=request.POST["phone"]
-        door_no=request.POST["door_no"]
-        street=request.POST["street"]
-        city=request.POST["city"]
         k=User.objects.filter(username=username)
         if len(k) == 0:
-            if username == "" or password == "" or email == "" or phone =="" or door_no == "" or street == "" or city == "":
+            if username == "" or password == "" or email == "":
                 return render(request,'pizza/register.html',{"msg":"all fields are mandatory"})
             User.objects.create_user(username,email,password)
-            u = User.objects.filter(username=username)   
-            u_p = UserProfile(user=u[0],phone=phone,door_no=door_no,street=street,city=city)
-            u_p.save()
         else:
             return render(request,'pizza/register.html',{"msg":"username already exists choose some other username"})
     return render(request,'pizza/login.html',{"msg":""})
