@@ -27,7 +27,7 @@ def index(request):
     return render(request,'pizza/index.html',{"msg":""})
 
 def register(request):
-    return render(request,'pizza/register.html',{"msg":None})
+    return render(request,'pizza/register.html',{"msg":""})
 
 def login_view(request):
     if request.method == "POST":
