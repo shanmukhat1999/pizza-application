@@ -3,7 +3,16 @@ from django.contrib.auth.models import User
 
 
 # Create your models here.
+class UserProfile(models.Model):  
+    user = models.OneToOneField(User,on_delete=models.CASCADE,related_name="user") 
+    phone = models.CharField(max_length=10)
+    door_no = models.CharField(max_length=64)
+    street = models.CharField(max_length=64)
+    city = models.CharField(max_length=64)     
 
+    def __str__(self):
+        return f"{self.user.username}"
+    
 class Item(models.Model):
     item_type = models.CharField(max_length=64)
     item_name = models.CharField(max_length=64)
