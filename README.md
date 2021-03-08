@@ -1,3 +1,3 @@
 # Project 3
 
-Web Programming with Python and JavaScript
+Web Application for a pizza restaurant
