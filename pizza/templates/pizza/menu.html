@@ -10,6 +10,7 @@
 
             td, th {
                 border: 1px solid black;
+                padding: 5px;
             }
         </style>
         <script type="text/javascript">
@@ -59,7 +60,7 @@
                         if(button.dataset.quan === "1")
                         {
                             localStorage.removeItem(button.dataset.iden);
-                            button.parentNode.remove()
+                            button.parentNode.parentNode.remove()
                         }
                         else
                         {
@@ -112,7 +113,7 @@
                                 {
                                     var p=parseFloat(parseFloat(button.dataset.val)*(parseInt(localStorage.getItem(button.dataset.iden))+1));
                                     p=Math.round(p*100) /100;
-                                    document.querySelector('#cartlist').getElementsByTagName('tr')[i].innerHTML=`<tr><td>${button.dataset.item_type}</td><td>${button.dataset.item_name}</td><td>${button.dataset.item_size}</td><td>${parseInt(qu)-1}</td><td>${q}</td><td><button class="rem" data-val=${button.dataset.val} data-iden=${button.dataset.iden} data-quan=${parseInt(qu)-1} data-cost=${q} data-item_type=${button.dataset.item_type} data-item_name=${button.dataset.item_name} data-item_size=${button.dataset.item_size}>-</button></td></tr>`;
+                                    document.querySelector('#cartlist').getElementsByTagName('tr')[i].innerHTML=`<tr><td>${button.dataset.item_type}</td><td>${button.dataset.item_name}</td><td>${button.dataset.item_size}</td><td>${parseInt(localStorage.getItem(button.dataset.iden))+1}</td><td>${p}</td><td><button class="rem" data-iden=${button.dataset.iden} data-val=${button.dataset.val} data-quan=${parseInt(localStorage.getItem(button.dataset.iden))+1} data-cost=${p} data-item_type=${button.dataset.item_type} data-item_name=${button.dataset.item_name} data-item_size=${button.dataset.item_size}>-</button></td></tr>`;
                                     localStorage.setItem(button.dataset.iden,parseInt(localStorage.getItem(button.dataset.iden))+1);
                                 }
                             }
@@ -120,7 +121,7 @@
                         else
                         {
                             var tr=document.createElement('tr');
-                            tr.innerHTML=`<tr><td>${button.dataset.item_type}</td><td>${button.dataset.item_name}</td><td>${button.dataset.item_size}</td><td>${parseInt(qu)-1}</td><td>${q}</td><td><button class="rem" data-val=${button.dataset.val} data-iden=${button.dataset.iden} data-quan=${parseInt(qu)-1} data-cost=${q} data-item_type=${button.dataset.item_type} data-item_name=${button.dataset.item_name} data-item_size=${button.dataset.item_size}>-</button></td></tr>`;
+                            tr.innerHTML=`<tr><td>${button.dataset.item_type}</td><td>${button.dataset.item_name}</td><td>${button.dataset.item_size}</td><td>${1}</td><td>${button.dataset.val}</td><td><button class="rem" data-iden=${button.dataset.iden} data-val=${button.dataset.val} data-quan=${1} data-cost=${button.dataset.val} data-item_type=${button.dataset.item_type} data-item_name=${button.dataset.item_name} data-item_size=${button.dataset.item_size}>-</button></td></tr>`;
                             document.querySelector('#cartlist').append(tr);
                             localStorage.setItem(button.dataset.iden,1);
                         }
