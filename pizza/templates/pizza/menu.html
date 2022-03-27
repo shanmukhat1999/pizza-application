@@ -213,69 +213,174 @@
         <h1>Menu</h1>
         <hr>
         <h3>Regular pizza</h3>
-        {% for i in rpizza %}
+        <table>
+            <thead>
+                <th>Name</th>
+                <th>Size</th>
+                <th>Price</th>
+                <th></th>
+            </thead>
+            {% for i in rpizza %}
+            <tbody>
+                <td>{{i.item_name}}</td>
+                <td>{{i.item_size}}</td>
+                <td>{{i.price}}</td>
+                <td><button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button></td>
+            </tbody>
+            {% endfor %}
+        </table>
+        <!-- {% for i in rpizza %}
         <div>
             {{i.item_name}}
             ||
             {{i.item_size}}-{{i.price}}
             <button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button>
         </div>
-        {% endfor %}
+        {% endfor %} -->
         <h3>Sicilian pizza</h3>
-        {% for i in spizza %}
+        <table>
+            <thead>
+                <th>Name</th>
+                <th>Size</th>
+                <th>Price</th>
+                <th></th>
+            </thead>
+            {% for i in spizza %}
+            <tbody>
+                <td>{{i.item_name}}</td>
+                <td>{{i.item_size}}</td>
+                <td>{{i.price}}</td>
+                <td><button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button></td>
+            </tbody>
+            {% endfor %}
+        </table>
+        <!-- {% for i in spizza %}
         <div>
             {{i.item_name}}
             ||
             {{i.item_size}}-{{i.price}}
             <button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button>
         </div>
-        {% endfor %}
+        {% endfor %} -->
         <h3>Toppings</h3>
-        {% for i in toppings %}
+        <table>
+            <thead>
+                <th>Name</th>
+                <th>Price</th>
+                <th></th>
+            </thead>
+            {% for i in toppings %}
+            <tbody>
+                <td>{{i.item_name}}</td>
+                <td>{{i.price}}</td>
+                <td><button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button></td>
+            </tbody>
+            {% endfor %}
+        </table>
+        <!-- {% for i in toppings %}
         <div>
             {{i.item_name}}
             ||
             {{i.price}}
             <button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button>
         </div>
-        {% endfor %}
+        {% endfor %} -->
         <h3>Subs</h3>
-        {% for i in subs %}
+        <table>
+            <thead>
+                <th>Name</th>
+                <th>Size</th>
+                <th>Price</th>
+                <th></th>
+            </thead>
+            {% for i in subs %}
+            <tbody>
+                <td>{{i.item_name}}</td>
+                <td>{{i.item_size}}</td>
+                <td>{{i.price}}</td>
+                <td><button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button></td>
+            </tbody>
+            {% endfor %}
+        </table>
+        <!-- {% for i in subs %}
         <div>
             {{i.item_name}}
             ||
             {{i.item_size}}-{{i.price}}
             <button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button>
         </div>
-        {% endfor %}
+        {% endfor %} -->
         <h3>Pasta</h3>
-        {% for i in pasta %}
+        <table>
+            <thead>
+                <th>Name</th>
+                <th>Price</th>
+                <th></th>
+            </thead>
+            {% for i in pasta %}
+            <tbody>
+                <td>{{i.item_name}}</td>
+                <td>{{i.price}}</td>
+                <td><button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button></td>
+            </tbody>
+            {% endfor %}
+        </table>
+        <!-- {% for i in pasta %}
         <div>
             {{i.item_name}}
             ||
             {{i.price}}
             <button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button>
         </div>
-        {% endfor %}
+        {% endfor %} -->
         <h3>Salads</h3>
-        {% for i in salads %}
+        <table>
+            <thead>
+                <th>Name</th>
+                <th>Price</th>
+                <th></th>
+            </thead>
+            {% for i in salads %}
+            <tbody>
+                <td>{{i.item_name}}</td>
+                <td>{{i.price}}</td>
+                <td><button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button></td>
+            </tbody>
+            {% endfor %}
+        </table>
+        <!-- {% for i in salads %}
         <div>
             {{i.item_name}}
             ||
             {{i.price}}
             <button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button>
         </div>
-        {% endfor %}
+        {% endfor %} -->
         <h3>Dinner platters</h3>
-        {% for i in dinnerplatters %}
+        <table>
+            <thead>
+                <th>Name</th>
+                <th>Size</th>
+                <th>Price</th>
+                <th></th>
+            </thead>
+            {% for i in dinnerplatters %}
+            <tbody>
+                <td>{{i.item_name}}</td>
+                <td>{{i.item_size}}</td>
+                <td>{{i.price}}</td>
+                <td><button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button></td>
+            </tbody>
+            {% endfor %}
+        </table>
+        <!-- {% for i in dinnerplatters %}
         <div>
             {{i.item_name}}
             ||
             {{i.item_size}}-{{i.price}}
             <button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button>
         </div>
-        {% endfor %}
+        {% endfor %} -->
         <input type="hidden" id="refresh" value="no">
     </body>
 </html>
-
