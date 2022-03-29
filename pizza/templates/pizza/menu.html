@@ -12,6 +12,10 @@
                 border: 1px solid black;
                 padding: 5px;
             }
+            
+            table + table, table + table tr:first-child > * {
+                border-top: 0;
+            }
         </style>
         <script type="text/javascript">
             document.addEventListener('DOMContentLoaded',() => {
@@ -207,16 +211,20 @@
     <body>
         <h1>Cart</h1>
         <div>
-            <tr>
-                <th>Type</th>
-                <th>Name</th>
-                <th>Size</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th></th>
-            </tr>
-            <ul id='cartlist'>
-            </ul>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Name</th>
+                        <th>Size</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th></th>
+                    </tr>
+                </thead>
+            </table>
+            <table id='cartlist'>
+            </table>
         </div>
         <div id="total"> 
         </div>
