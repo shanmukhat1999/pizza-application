@@ -69,7 +69,7 @@
                             q=Math.round(q*100) /100;
                             console.log(qu);
                             var x;
-                            for(x=0;x<document.querySelector('#cartlist').getElementsByTagName('tr').length;x++)
+                            for(x=1;x<document.querySelector('#cartlist').getElementsByTagName('tr').length;x++)
                             {
                                 if(document.querySelector('#cartlist').getElementsByTagName('tr')[x].getElementsByTagName('button')[0].dataset.iden === button.dataset.iden)
                                 {
@@ -106,7 +106,7 @@
                         if(button.dataset.iden in localStorage)
                         {
                             var i;
-                            for(i=0;i<document.querySelector('#cartlist').getElementsByTagName('tr').length;i++)
+                            for(i=1;i<document.querySelector('#cartlist').getElementsByTagName('tr').length;i++)
                             {
                                 
                                 if(document.querySelector('#cartlist').getElementsByTagName('tr')[i].getElementsByTagName('button')[0].dataset.iden === button.dataset.iden)
@@ -140,7 +140,7 @@
                     var item_names=[];
                     var item_quans=[];
                     var x1;
-                    for(x1=0;x1<document.querySelector('#cartlist').getElementsByTagName('tr').length;x1++)
+                    for(x1=1;x1<document.querySelector('#cartlist').getElementsByTagName('tr').length;x1++)
                     {
                         item_names.push(" "+(document.querySelector('#cartlist').getElementsByTagName('tr')[x1].getElementsByTagName('button')[0].dataset.item)+" : "+document.querySelector('#cartlist').getElementsByTagName('tr')[x1].getElementsByTagName('button')[0].dataset.quan+" ");
                     }  
@@ -170,7 +170,7 @@
                     var item_costs=[];
                     var item_sizes=[];
                     var x1;
-                    for(x1=0;x1<document.querySelector('#cartlist').getElementsByTagName('tr').length;x1++)
+                    for(x1=1;x1<document.querySelector('#cartlist').getElementsByTagName('tr').length;x1++)
                     {
                         item_types.push(document.querySelector('#cartlist').getElementsByTagName('tr')[x1].getElementsByTagName('button')[0].dataset.item_type);
                         item_names.push(document.querySelector('#cartlist').getElementsByTagName('tr')[x1].getElementsByTagName('button')[0].dataset.item_name);
@@ -207,8 +207,16 @@
     <body>
         <h1>Cart</h1>
         <div>
-            <ul id='cartlist'>
-            </ul>
+            <table id='cartlist'>
+                <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Size</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th></th>
+                </tr>
+            </table>
         </div>
         <div id="total"> 
         </div>
