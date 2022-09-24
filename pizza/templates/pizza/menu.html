@@ -160,6 +160,7 @@
                         localStorage.removeItem("cart");
                         document.querySelector('#cartlist').innerHTML = localStorage.getItem("cart");
                         document.querySelector('#total').innerHTML = `<h3>Total: ${sum}</h3>`;
+                        window.location.reload(true);
                     }
                     req.setRequestHeader("X-CSRFToken",getCookie("csrftoken"));
                     const data = new FormData();
