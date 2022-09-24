@@ -1,8 +1,18 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>hello</title>
+        <title>Menu</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <style>
+            body {
+                padding-top: 10px;
+                padding-left: 10px;
+            }
+
             table {
                 border: 1px solid black;
                 border-collapse: collapse;
@@ -15,29 +25,28 @@
         </style>
         <script type="text/javascript">
             document.addEventListener('DOMContentLoaded',() => {
+
+                var sum;
+
                 // reload when the back/front are used
-                var s;
-                if(!!window.performance && window.performance.navigation.type == 2)
-                {
+                if(!!window.performance && window.performance.navigation.type == 2) {
                     window.location.reload(true);
-                } 
+                }
+
                 //When the window is opened cart should be restored
-                if(localStorage.getItem("sum"))
-                {
-                    if(localStorage.getItem("sum") === "0")
-                    {
-                        document.querySelector('#po').disabled = true;
-                        s=0;
+                if(localStorage.getItem("sum")) {
+                    if(localStorage.getItem("sum") === "0") {
+                        document.querySelector('#placeorder').disabled = true;
+                        sum = 0;
                     }
-                    document.querySelector('#cartlist').innerHTML=localStorage.getItem("imp");
-                    s=parseFloat(localStorage.getItem("sum"));
+                    document.querySelector('#cartlist').innerHTML = localStorage.getItem("cart");
+                    sum = parseFloat(localStorage.getItem("sum"));
+                } else {
+                    document.querySelector('#placeorder').disabled = true;
+                    sum = 0;
                 }
-                else
-                {
-                    document.querySelector('#po').disabled = true;
-                    s=0;
-                }
-                document.querySelector('#total').innerHTML = `<h3>Total: ${s}</h3>`;
+                document.querySelector('#total').innerHTML = `<h3>Total: ${sum}</h3>`;
+
                 //For csrf-token cookie function
                 function getCookie(c_name) {
                    if(document.cookie.length > 0) {
@@ -51,135 +60,92 @@
                     }
                     return "";
                 }
-                //when remove button is pressed from cart func is called
-                function func(button)
-                {
+
+                //Handles after remove button is pressed
+                function handleRemoveItem(button) {
                     button.onclick = () => {
-                        s=s-parseFloat(button.dataset.val);
-                        s=Math.round(s * 100) / 100;
-                        if(button.dataset.quan === "1")
-                        {
+                        sum = Math.round((sum - parseFloat(button.dataset.val)) * 100) / 100;
+                        if (button.dataset.quan === "1") {
                             localStorage.removeItem(button.dataset.iden);
                             button.parentNode.parentNode.remove()
-                        }
-                        else
-                        {
-                            var qu=button.dataset.quan;
-                            var q=parseFloat(parseInt(localStorage.getItem(button.dataset.iden)-1)*parseFloat(button.dataset.val));
-                            q=Math.round(q*100) /100;
-                            console.log(qu);
-                            var x;
-                            for(x=1;x<document.querySelector('#cartlist').getElementsByTagName('tr').length;x++)
-                            {
-                                if(document.querySelector('#cartlist').getElementsByTagName('tr')[x].getElementsByTagName('button')[0].dataset.iden === button.dataset.iden)
-                                {
-                                    document.querySelector('#cartlist').getElementsByTagName('tr')[x].innerHTML=`<tr><td>${button.dataset.item_type}</td><td>${button.dataset.item_name}</td><td>${button.dataset.item_size}</td><td>${parseInt(qu)-1}</td><td>${q}</td><td><button class="rem" data-val=${button.dataset.val} data-iden=${button.dataset.iden} data-quan=${parseInt(qu)-1} data-cost=${q} data-item_type=${button.dataset.item_type} data-item_name=${button.dataset.item_name} data-item_size=${button.dataset.item_size}>-</button></td></tr>`;
+                        } else {
+                            var quantity = button.dataset.quan;
+                            var full_cost = Math.round((parseFloat(parseInt(localStorage.getItem(button.dataset.iden) - 1) * parseFloat(button.dataset.val))) * 100) / 100;
+                            for(var x = 1; x < document.querySelector('#cartlist').getElementsByTagName('tr').length; x++) {
+                                if(document.querySelector('#cartlist').getElementsByTagName('tr')[x].getElementsByTagName('button')[0].dataset.iden === button.dataset.iden) {
+                                    document.querySelector('#cartlist').getElementsByTagName('tr')[x].innerHTML=`<tr><td>${button.dataset.item_type}</td><td>${button.dataset.item_name}</td><td>${button.dataset.item_size}</td><td>${parseInt(quantity)-1}</td><td>${full_cost}</td><td><button class="rem" data-val=${button.dataset.val} data-iden=${button.dataset.iden} data-quan=${parseInt(quantity)-1} data-cost=${full_cost} data-item_type=${button.dataset.item_type} data-item_name=${button.dataset.item_name} data-item_size=${button.dataset.item_size}>-</button></td></tr>`;
                                 }
                             }
-                            localStorage.setItem(button.dataset.iden,qu-1);
+                            localStorage.setItem(button.dataset.iden,quantity-1);
                         }
-                        if(s === 0)
-                        {
-                            document.querySelector('#po').disabled = true;
+                        if (sum === 0) {
+                            document.querySelector('#placeorder').disabled = true;
                         }
-                        document.querySelector('#total').innerHTML = `<h3>Total: ${s}</h3>`;
-                        localStorage.setItem("imp",document.querySelector('#cartlist').innerHTML);
-                        localStorage.setItem("sum",s);
-                        if(parseInt(localStorage.getItem("sum")) !== 0)
-                        document.querySelectorAll('.rem').forEach(button => {
-                            func(button);
-                        });
+                        document.querySelector('#total').innerHTML = `<h3>Total: ${sum}</h3>`;
+                        localStorage.setItem("cart",document.querySelector('#cartlist').innerHTML);
+                        localStorage.setItem("sum",sum);
+                        if(parseInt(localStorage.getItem("sum")) !== 0) {
+                            document.querySelectorAll('.rem').forEach(button => {
+                                handleRemoveItem(button);
+                            });
+                        }
                     }
                 }
-                //when remove button is pressed
+
+                //When remove button is pressed
                 document.querySelectorAll('.rem').forEach(button => {
-                    func(button);
+                    handleRemoveItem(button);
                 });
+
                 //when add button is pressed
                 document.querySelectorAll('.a').forEach(button => {
                     button.onclick = () => {
                         
-                        document.querySelector('#po').disabled = false;
-                        s=s+parseFloat(button.dataset.val);
-                        s=Math.round(s * 100) / 100;
+                        document.querySelector('#placeorder').disabled = false;
+                        sum = Math.round((sum + parseFloat(button.dataset.val)) * 100) / 100;
                         
-                        if(button.dataset.iden in localStorage)
-                        {
-                            var i;
-                            for(i=1;i<document.querySelector('#cartlist').getElementsByTagName('tr').length;i++)
-                            {
-                                
-                                if(document.querySelector('#cartlist').getElementsByTagName('tr')[i].getElementsByTagName('button')[0].dataset.iden === button.dataset.iden)
-                                {
-                                    var p=parseFloat(parseFloat(button.dataset.val)*(parseInt(localStorage.getItem(button.dataset.iden))+1));
-                                    p=Math.round(p*100) /100;
-                                    document.querySelector('#cartlist').getElementsByTagName('tr')[i].innerHTML=`<tr><td>${button.dataset.item_type}</td><td>${button.dataset.item_name}</td><td>${button.dataset.item_size}</td><td>${parseInt(localStorage.getItem(button.dataset.iden))+1}</td><td>${p}</td><td><button class="rem" data-iden=${button.dataset.iden} data-val=${button.dataset.val} data-quan=${parseInt(localStorage.getItem(button.dataset.iden))+1} data-cost=${p} data-item_type=${button.dataset.item_type} data-item_name=${button.dataset.item_name} data-item_size=${button.dataset.item_size}>-</button></td></tr>`;
+                        if (button.dataset.iden in localStorage) {
+                            for (var i=1;i<document.querySelector('#cartlist').getElementsByTagName('tr').length;i++) {
+                                if (document.querySelector('#cartlist').getElementsByTagName('tr')[i].getElementsByTagName('button')[0].dataset.iden === button.dataset.iden) {
+                                    var full_cost = Math.round((parseFloat(parseFloat(button.dataset.val)*(parseInt(localStorage.getItem(button.dataset.iden))+1)))*100) / 100;
+                                    document.querySelector('#cartlist').getElementsByTagName('tr')[i].innerHTML=`<tr><td>${button.dataset.item_type}</td><td>${button.dataset.item_name}</td><td>${button.dataset.item_size}</td><td>${parseInt(localStorage.getItem(button.dataset.iden))+1}</td><td>${full_cost}</td><td><button class="rem" data-iden=${button.dataset.iden} data-val=${button.dataset.val} data-quan=${parseInt(localStorage.getItem(button.dataset.iden))+1} data-cost=${full_cost} data-item_type=${button.dataset.item_type} data-item_name=${button.dataset.item_name} data-item_size=${button.dataset.item_size}>-</button></td></tr>`;
                                     localStorage.setItem(button.dataset.iden,parseInt(localStorage.getItem(button.dataset.iden))+1);
                                 }
                             }
                         }
                         else
                         {
-                            var tr=document.createElement('tr');
+                            var tr = document.createElement('tr');
                             tr.innerHTML=`<tr><td>${button.dataset.item_type}</td><td>${button.dataset.item_name}</td><td>${button.dataset.item_size}</td><td>${1}</td><td>${button.dataset.val}</td><td><button class="rem" data-iden=${button.dataset.iden} data-val=${button.dataset.val} data-quan=${1} data-cost=${button.dataset.val} data-item_type=${button.dataset.item_type} data-item_name=${button.dataset.item_name} data-item_size=${button.dataset.item_size}>-</button></td></tr>`;
                             document.querySelector('#cartlist').append(tr);
                             localStorage.setItem(button.dataset.iden,1);
                         }
-                        document.querySelector('#total').innerHTML = `<h3>Total: ${s}</h3>`;
-                        localStorage.setItem("imp",document.querySelector('#cartlist').innerHTML);
-                        localStorage.setItem("sum",s);
+                        document.querySelector('#total').innerHTML = `<h3>Total: ${sum}</h3>`;
+                        localStorage.setItem("cart",document.querySelector('#cartlist').innerHTML);
+                        localStorage.setItem("sum",sum);
                         document.querySelectorAll('.rem').forEach(button => {
-                            func(button);
+                            handleRemoveItem(button);
                         });
-                         
                     }
                 });
                 //when place order is pressed
-                /*document.querySelector('#po').onclick = () => {
-                    localStorage.clear();
-                    var item_names=[];
-                    var item_quans=[];
-                    var x1;
-                    for(x1=1;x1<document.querySelector('#cartlist').getElementsByTagName('tr').length;x1++)
-                    {
-                        item_names.push(" "+(document.querySelector('#cartlist').getElementsByTagName('tr')[x1].getElementsByTagName('button')[0].dataset.item)+" : "+document.querySelector('#cartlist').getElementsByTagName('tr')[x1].getElementsByTagName('button')[0].dataset.quan+" ");
-                    }  
-                    console.log("a");
-                    var req= new XMLHttpRequest();
-                    req.open('POST','{% url "orders" %}',true);
-                    req.onload = function() {
-                        if (this.readyState == 4 && this.status == 200) {
-                            console.log("hi")
-                            document.querySelector('h5').innerHTML=`order placed successfully. Go to "my orders" to view your order`;
-                        }    
-                        
-                    }
-                    req.setRequestHeader("X-CSRFToken",getCookie("csrftoken"));
-                    const data = new FormData();
-                    data.append('item_names',item_names);
-                    data.append('price',s);
-                    data.append('username',document.querySelector('h5').dataset.user);
-                    req.send(data);
-                    
-                }*/
-                document.querySelector('#po').onclick = () => {
+                document.querySelector('#placeorder').onclick = () => {
                     localStorage.clear();
                     var item_names=[];
                     var item_types=[];
                     var item_quans=[];
                     var item_costs=[];
                     var item_sizes=[];
-                    var x1;
-                    for(x1=1;x1<document.querySelector('#cartlist').getElementsByTagName('tr').length;x1++)
+
+                    for(var x = 1; x < document.querySelector('#cartlist').getElementsByTagName('tr').length; x1++)
                     {
-                        item_types.push(document.querySelector('#cartlist').getElementsByTagName('tr')[x1].getElementsByTagName('button')[0].dataset.item_type);
-                        item_names.push(document.querySelector('#cartlist').getElementsByTagName('tr')[x1].getElementsByTagName('button')[0].dataset.item_name);
-                        item_sizes.push(document.querySelector('#cartlist').getElementsByTagName('tr')[x1].getElementsByTagName('button')[0].dataset.item_size);
-                        item_quans.push(parseInt(document.querySelector('#cartlist').getElementsByTagName('tr')[x1].getElementsByTagName('button')[0].dataset.quan));
-                        item_costs.push(parseFloat(document.querySelector('#cartlist').getElementsByTagName('tr')[x1].getElementsByTagName('button')[0].dataset.cost));
-                    }  
-                    console.log("a");
-                    var req= new XMLHttpRequest();
+                        item_types.push(document.querySelector('#cartlist').getElementsByTagName('tr')[x].getElementsByTagName('button')[0].dataset.item_type);
+                        item_names.push(document.querySelector('#cartlist').getElementsByTagName('tr')[x].getElementsByTagName('button')[0].dataset.item_name);
+                        item_sizes.push(document.querySelector('#cartlist').getElementsByTagName('tr')[x].getElementsByTagName('button')[0].dataset.item_size);
+                        item_quans.push(parseInt(document.querySelector('#cartlist').getElementsByTagName('tr')[x].getElementsByTagName('button')[0].dataset.quan));
+                        item_costs.push(parseFloat(document.querySelector('#cartlist').getElementsByTagName('tr')[x].getElementsByTagName('button')[0].dataset.cost));
+                    }
+                    var req = new XMLHttpRequest();
                     req.open('POST','{% url "orders" %}',true);
                     req.onload = function() {
                         if (this.readyState == 4 && this.status == 200) {
@@ -197,10 +163,8 @@
                     data.append('item_quans',item_quans);
                     data.append('price',s);
                     data.append('username',document.querySelector('h5').dataset.user);
-                    req.send(data);
-                    
+                    req.send(data);                  
                 }
-
             });
         </script>
     </head>
@@ -220,7 +184,7 @@
         </div>
         <div id="total"> 
         </div>
-        <button id="po">Place Order</button>
+        <button id="placeorder">Place Order</button>
         <div>
             <h5 data-user="{{ username }}"></h5>
         </div>
@@ -248,14 +212,6 @@
             </tbody>
             {% endfor %}
         </table>
-        <!-- {% for i in rpizza %}
-        <div>
-            {{i.item_name}}
-            ||
-            {{i.item_size}}-{{i.price}}
-            <button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button>
-        </div>
-        {% endfor %} -->
         <h3>Sicilian pizza</h3>
         <table>
             <thead>
@@ -273,14 +229,6 @@
             </tbody>
             {% endfor %}
         </table>
-        <!-- {% for i in spizza %}
-        <div>
-            {{i.item_name}}
-            ||
-            {{i.item_size}}-{{i.price}}
-            <button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button>
-        </div>
-        {% endfor %} -->
         <h3>Toppings</h3>
         <table>
             <thead>
@@ -296,14 +244,6 @@
             </tbody>
             {% endfor %}
         </table>
-        <!-- {% for i in toppings %}
-        <div>
-            {{i.item_name}}
-            ||
-            {{i.price}}
-            <button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button>
-        </div>
-        {% endfor %} -->
         <h3>Subs</h3>
         <table>
             <thead>
@@ -321,14 +261,6 @@
             </tbody>
             {% endfor %}
         </table>
-        <!-- {% for i in subs %}
-        <div>
-            {{i.item_name}}
-            ||
-            {{i.item_size}}-{{i.price}}
-            <button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button>
-        </div>
-        {% endfor %} -->
         <h3>Pasta</h3>
         <table>
             <thead>
@@ -344,14 +276,6 @@
             </tbody>
             {% endfor %}
         </table>
-        <!-- {% for i in pasta %}
-        <div>
-            {{i.item_name}}
-            ||
-            {{i.price}}
-            <button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button>
-        </div>
-        {% endfor %} -->
         <h3>Salads</h3>
         <table>
             <thead>
@@ -367,14 +291,6 @@
             </tbody>
             {% endfor %}
         </table>
-        <!-- {% for i in salads %}
-        <div>
-            {{i.item_name}}
-            ||
-            {{i.price}}
-            <button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button>
-        </div>
-        {% endfor %} -->
         <h3>Dinner platters</h3>
         <table>
             <thead>
@@ -392,14 +308,6 @@
             </tbody>
             {% endfor %}
         </table>
-        <!-- {% for i in dinnerplatters %}
-        <div>
-            {{i.item_name}}
-            ||
-            {{i.item_size}}-{{i.price}}
-            <button  class="a" data-item_type={{i.item_type}} data-item_name={{i.item_name}} data-item_size={{i.item_size}} data-val={{i.price}} data-iden = {{i.id}}>add</button>
-        </div>
-        {% endfor %} -->
         <input type="hidden" id="refresh" value="no">
     </body>
 </html>
