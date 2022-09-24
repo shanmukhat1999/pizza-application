@@ -26,7 +26,7 @@
         <ul>
             {% for i in user_orders%}
             {% with k=forloop.counter %}
-            Your Order Number is #{{i.id}}
+            Order Number is #{{i.id}}
             <div>{{i.time_ordered}}</div>
             
             <div>Status : {{i.status}}</div>

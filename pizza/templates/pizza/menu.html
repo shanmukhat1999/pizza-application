@@ -34,7 +34,7 @@
                 }
 
                 //When the window is opened cart should be restored
-                if(localStorage.getItem("sum")) {
+                if (localStorage.getItem("sum")) {
                     if(localStorage.getItem("sum") === "0") {
                         document.querySelector('#placeorder').disabled = true;
                         sum = 0;
@@ -49,9 +49,9 @@
 
                 //For csrf-token cookie function
                 function getCookie(c_name) {
-                   if(document.cookie.length > 0) {
+                   if (document.cookie.length > 0) {
                         c_start = document.cookie.indexOf(c_name + "=");
-                        if(c_start != -1) {
+                        if (c_start != -1) {
                             c_start = c_start + c_name.length + 1;
                             c_end = document.cookie.indexOf(";", c_start);
                             if(c_end == -1) c_end = document.cookie.length;
@@ -84,7 +84,7 @@
                         document.querySelector('#total').innerHTML = `<h3>Total: ${sum}</h3>`;
                         localStorage.setItem("cart",document.querySelector('#cartlist').innerHTML);
                         localStorage.setItem("sum",sum);
-                        if(parseInt(localStorage.getItem("sum")) !== 0) {
+                        if (parseInt(localStorage.getItem("sum")) !== 0) {
                             document.querySelectorAll('.rem').forEach(button => {
                                 handleRemoveItem(button);
                             });
@@ -128,6 +128,7 @@
                         });
                     }
                 });
+                
                 //when place order is pressed
                 document.querySelector('#placeorder').onclick = () => {
                     localStorage.clear();
@@ -137,8 +138,7 @@
                     var item_costs=[];
                     var item_sizes=[];
 
-                    for(var x = 1; x < document.querySelector('#cartlist').getElementsByTagName('tr').length; x1++)
-                    {
+                    for(var x = 1; x < document.querySelector('#cartlist').getElementsByTagName('tr').length; x++) {
                         item_types.push(document.querySelector('#cartlist').getElementsByTagName('tr')[x].getElementsByTagName('button')[0].dataset.item_type);
                         item_names.push(document.querySelector('#cartlist').getElementsByTagName('tr')[x].getElementsByTagName('button')[0].dataset.item_name);
                         item_sizes.push(document.querySelector('#cartlist').getElementsByTagName('tr')[x].getElementsByTagName('button')[0].dataset.item_size);
