@@ -34,15 +34,18 @@
                 }
 
                 //When the window is opened cart should be restored
-                if (localStorage.getItem("sum")) {
+                if (localStorage.getItem("sum") != null) {
                     if(localStorage.getItem("sum") === "0") {
                         document.querySelector('#placeorder').disabled = true;
+                        localStorage.removeItem("cart");
                         sum = 0;
                     }
                     document.querySelector('#cartlist').innerHTML = localStorage.getItem("cart");
                     sum = parseFloat(localStorage.getItem("sum"));
+                    document.querySelector('h5').innerHTML = ``;
                 } else {
                     document.querySelector('#placeorder').disabled = true;
+                    localStorage.removeItem("cart");
                     sum = 0;
                 }
                 document.querySelector('#total').innerHTML = `<h3>Total: ${sum}</h3>`;
@@ -105,7 +108,7 @@
                         sum = Math.round((sum + parseFloat(button.dataset.val)) * 100) / 100;
                         
                         if (button.dataset.iden in localStorage) {
-                            for (var i=1;i<document.querySelector('#cartlist').getElementsByTagName('tr').length;i++) {
+                            for (var i = 1; i < document.querySelector('#cartlist').getElementsByTagName('tr').length; i++) {
                                 if (document.querySelector('#cartlist').getElementsByTagName('tr')[i].getElementsByTagName('button')[0].dataset.iden === button.dataset.iden) {
                                     var full_cost = Math.round((parseFloat(parseFloat(button.dataset.val)*(parseInt(localStorage.getItem(button.dataset.iden))+1)))*100) / 100;
                                     document.querySelector('#cartlist').getElementsByTagName('tr')[i].innerHTML=`<tr><td>${button.dataset.item_type}</td><td>${button.dataset.item_name}</td><td>${button.dataset.item_size}</td><td>${parseInt(localStorage.getItem(button.dataset.iden))+1}</td><td>${full_cost}</td><td><button class="rem" data-iden=${button.dataset.iden} data-val=${button.dataset.val} data-quan=${parseInt(localStorage.getItem(button.dataset.iden))+1} data-cost=${full_cost} data-item_type=${button.dataset.item_type} data-item_name=${button.dataset.item_name} data-item_size=${button.dataset.item_size}>-</button></td></tr>`;
@@ -151,8 +154,7 @@
                         if (this.readyState == 4 && this.status == 200) {
                             console.log(req.responseText);
                             document.querySelector('h5').innerHTML=`${req.responseText}`;
-                        }    
-                        
+                        }
                     }
                     req.setRequestHeader("X-CSRFToken",getCookie("csrftoken"));
                     const data = new FormData();
@@ -163,7 +165,13 @@
                     data.append('item_quans',item_quans);
                     data.append('price',sum);
                     data.append('username',document.querySelector('h5').dataset.user);
-                    req.send(data);                
+                    req.send(data);
+                    
+                    sum = 0;
+                    document.querySelector('#placeorder').disabled = true;
+                    localStorage.removeItem("sum");
+                    localStorage.removeItem("cart");
+                    document.querySelector('#cartlist').innerHTML = localStorage.getItem("cart");
                 }
             });
         </script>
