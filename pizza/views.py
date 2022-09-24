@@ -108,7 +108,7 @@ def orders(request):
         item = Item.objects.filter(item_name=item_names[i],item_type=item_types[i],item_size=item_sizes[i])
         order = Order(order=user_order,item=item[0],quantity=item_quans[i],item_cost=item_costs[i])
         order.save()    
-    return HttpResponse("Ordered Succesfully, Go to Myorders to see updates on your orders")    
+    return HttpResponse("Ordered Succesfully, Go to My Orders to see updates on your orders")    
 
 def myorders(request , username):
     if "username" not in request.session:
