@@ -2,7 +2,9 @@
 
 Web Application for Pizza Ordering
 
-This web application is useful for taking pizza orders and updating the status of orders.
+This web application is useful for ordering pizzas and updating the status of orders.
+
+This web application is written mainly in Python (using Django web framework). Data of the items in menu and users' details are stored in SQLite database. Web pages are written using HTML and Javascript with minor styling.
 
 
 User Guide :
