@@ -128,7 +128,7 @@
                         });
                     }
                 });
-                
+
                 //when place order is pressed
                 document.querySelector('#placeorder').onclick = () => {
                     localStorage.clear();
@@ -161,9 +161,9 @@
                     data.append('item_sizes',item_sizes);
                     data.append('item_costs',item_costs);
                     data.append('item_quans',item_quans);
-                    data.append('price',s);
+                    data.append('price',sum);
                     data.append('username',document.querySelector('h5').dataset.user);
-                    req.send(data);                  
+                    req.send(data);                
                 }
             });
         </script>
