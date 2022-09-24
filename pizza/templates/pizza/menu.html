@@ -42,7 +42,6 @@
                     }
                     document.querySelector('#cartlist').innerHTML = localStorage.getItem("cart");
                     sum = parseFloat(localStorage.getItem("sum"));
-                    document.querySelector('h5').innerHTML = ``;
                 } else {
                     document.querySelector('#placeorder').disabled = true;
                     localStorage.removeItem("cart");
@@ -155,6 +154,12 @@
                             console.log(req.responseText);
                             window.alert(req.responseText);
                         }
+                        sum = 0;
+                        document.querySelector('#placeorder').disabled = true;
+                        localStorage.removeItem("sum");
+                        localStorage.removeItem("cart");
+                        document.querySelector('#cartlist').innerHTML = localStorage.getItem("cart");
+                        document.querySelector('#total').innerHTML = `<h3>Total: ${sum}</h3>`;
                     }
                     req.setRequestHeader("X-CSRFToken",getCookie("csrftoken"));
                     const data = new FormData();
@@ -166,13 +171,6 @@
                     data.append('price',sum);
                     data.append('username',document.querySelector('h5').dataset.user);
                     req.send(data);
-                    
-                    sum = 0;
-                    document.querySelector('#placeorder').disabled = true;
-                    localStorage.removeItem("sum");
-                    localStorage.removeItem("cart");
-                    document.querySelector('#cartlist').innerHTML = localStorage.getItem("cart");
-                    document.querySelector('#total').innerHTML = `<h3>Total: ${sum}</h3>`;
                 }
             });
         </script>
