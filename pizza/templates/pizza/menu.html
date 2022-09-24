@@ -153,7 +153,7 @@
                     req.onload = function() {
                         if (this.readyState == 4 && this.status == 200) {
                             console.log(req.responseText);
-                            document.querySelector('h5').innerHTML=`${req.responseText}`;
+                            window.alert(req.responseText);
                         }
                     }
                     req.setRequestHeader("X-CSRFToken",getCookie("csrftoken"));
@@ -172,6 +172,7 @@
                     localStorage.removeItem("sum");
                     localStorage.removeItem("cart");
                     document.querySelector('#cartlist').innerHTML = localStorage.getItem("cart");
+                    document.querySelector('#total').innerHTML = `<h3>Total: ${sum}</h3>`;
                 }
             });
         </script>
